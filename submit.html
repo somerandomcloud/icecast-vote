@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<title>Icecast vote</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="css/main.css">
+<script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@1/src/zero-md.min.js"></script>
+<body>
+    <div class="sidenav">
+        <a href="./vote.html">Vote</a>
+        <a href="./submit.html">Submit</a>
+        <a href="./main.html">About</a>
+        <a href="./contact.html">Contact</a>
+    </div>
+
+    <div class="main">
+        <zero-md src="./submit.md">
+            <template>
+                <link rel="stylesheet"href="https://cdn.jsdelivr.net/gh/sindresorhus/github-markdown-css@4/github-markdown.min.css"/>
+                <link rel="stylesheet"href="https://cdn.jsdelivr.net/gh/PrismJS/prism@1/themes/prism.min.css"/>
+                <style>
+                    h1 {
+                        color: white;
+                    }
+                </style>
+            </template>
+          </zero-md>
+
+        <input id="myInput" value="Put a yt url here!">
+        <button id="myBtn" onclick="submitSong()">Submit</but>
+    </div>
+
+    <script>
+        var input = document.getElementById("myInput");
+        input.addEventListener("keypress", function(event) {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById("myBtn").click();
+          }
+        });
+
+        async function submitSong() {
+            var stuff = document.getElementById("myInput");
+            
+            await fetch(`http://localhost:8880/submit?url=${stuff.value}`, { method: 'POST' })
+            .then((response) => response.json())
+            .then((data) => {
+                if(!data) return alert('API didn\'t reply. Maybe the API is down?')
+                if(data.error) {
+                    if(data.error === "URL_INVALID") return alert('The url you submitted is invalid. If this is a mistake check the contacts tab')
+                    else return alert('There was an error! Please contact admin via the contacts tab')
+                }
+                else alert('Submitted your song!')
+            })
+        }
+    </script>
+
+</body>
+</html> 

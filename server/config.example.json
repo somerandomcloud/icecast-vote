@@ -1,0 +1,7 @@
+{
+    "yt-api-key": "this isnt in use, so dont bother setting",
+    "mpd": {
+        "host": "localhost",
+        "port": 6600
+    }
+}
